@@ -1,0 +1,39 @@
+create table SignUpAndLogin(
+id int primary key identity(1,1),
+name varchar(100) not null,
+fatherName varchar(100) not null,
+mobileNumber nvarchar(100) not null,
+emailId varchar(100),
+governmentId nvarchar(100) not null,
+password nvarchar(100) not null,
+dob date not null,
+_address varchar(255)not null)
+
+insert into SignUpAndLogin(name,fatherName,mobileNumber,emailId,governmentId,password,dob,_address) values
+('Surya','Rajendran','8870739685','rsurya@gmail.com','987601431234','r@Surya2','11/06/1997','Chennai'),
+('Kalpana','Kalyanasundaram','6978783433','kkalpana@gmail.com','BALP1234K','K@lp@n@K','10/09/1995','Chennai')
+
+
+create table GovernmentId(
+id int primary key identity(1,1),
+idNumber nvarchar(100)not null,
+name varchar(100) not null,
+fatherName varchar(100)not null,
+mobileNumber nvarchar(100),
+dob date not null,
+_address varchar(255)not null)
+
+insert into GovernmentId(idNumber,name,fatherName,mobileNumber,dob,_address) values
+('987601431234','Surya','Rajendran','8870739685','11/06/1997','Chennai'),
+('BALP1234K','Kalpana','Kalyanasundaram','6978783433','10/09/1995','Chennai')
+
+
+create table MobileNumber(
+id int primary key identity(1,1),
+numberType varchar(100)not null,
+number nvarchar(100)not null)
+
+insert into MobileNumber(numberType,number) values
+('Vip Number','9002005002'),
+('General Number','9853451912'),
+('Expired Number','8783428622')
