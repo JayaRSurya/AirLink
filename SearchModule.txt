@@ -1,0 +1,159 @@
+create procedure SearchPlans
+(@planType varchar(100))
+as begin 
+select id,planType,cost,validity,details from Plans where planType=@planType
+end
+
+drop procedure SearchPlans
+
+SearchPlans Unlimited
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.Data;
+
+class Search
+{
+    SqlConnection con = new SqlConnection("Data Source =DESKTOP-5TSL3H4\\SQLEXPRESS; Initial Catalog =ProjectTable ; Integrated Security=true;");
+    int id;
+    string planType;
+    string cost;
+    string validity;
+    string details;
+    
+
+    public int Id { get => id; set => id = value; }
+    public string PlanType { get => planType; set => planType = value; }
+    public string Cost { get => cost; set => cost = value; }
+    public string Validity { get => validity; set => validity = value; }
+    public string Details { get => details; set => details = value; }
+
+    public Search()
+    {
+
+    }
+
+    public Search(int id, string planType, string cost, string validity, string details)
+    {
+        this.Id = id;
+        this.PlanType = planType;
+        this.Cost = cost;
+        this.Validity = validity;
+        this.Details = details;
+    }
+
+    public Search(string planType)
+    {
+        this.planType = planType;
+    }
+
+    public Search(string cost, string validity, string details)
+    {
+        this.cost = cost;
+        this.validity = validity;
+        this.details = details;
+    }
+
+    public List<Search> ViewAllPlans()
+    {
+        con.Open();
+        List<Search> li = new List<Search>();
+        SqlCommand cmd = new SqlCommand("select id,planType,cost,validity,details from Plans", con);
+        SqlDataReader dr = cmd.ExecuteReader();
+        while (dr.Read())
+        {
+            Search s = new Search(dr.GetInt32(0), dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4));
+            li.Add(s);
+        }
+        con.Close();
+        return li;
+    }
+
+    public List<Search> SearchPlan()
+    {
+        Console.WriteLine("Enter plan type");
+        planType = Console.ReadLine();
+        con.Open();
+        List<Search> li = new List<Search>();
+        SqlCommand cmd = new SqlCommand("SearchPlans", con);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.AddWithValue("@planType", planType);
+        SqlDataReader dr = cmd.ExecuteReader();
+        while (dr.Read())
+        {
+            Search s = new Search(dr.GetInt32(0), dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4));
+            li.Add(s);
+        }
+        con.Close();
+        return li;
+    }
+}
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+class SearchDisplay
+{
+
+    Search obj = new Search();
+
+    public void DisplayAll()
+    {
+        List<Search> ls = obj.ViewAllPlans();
+        Console.WriteLine("{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}", "Id", "Plan Type", "Cost", "Validity", "Details");
+        foreach (Search item in ls)
+        {
+            Console.WriteLine("{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}", item.Id, item.PlanType, item.Cost, item.Validity, item.Details);
+        }
+    }
+
+    public void DisplayCurrentPlan()
+    {
+        List<Search> ls = obj.SearchPlan();
+        Console.WriteLine("{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}", "Id","Plan Type","Cost","Validity","Details");
+        foreach (Search item in ls)
+        {
+            Console.WriteLine("{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}",item.Id,item.PlanType,item.Cost,item.Validity,item.Details);
+        }
+    }
+   
+}
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Search Plan\n1.View All Plans\n2.Current Plan");
+        int ch = Convert.ToInt32(Console.ReadLine());
+        switch (ch)
+        {
+            case 1:
+                SearchDisplay sD = new SearchDisplay();
+                sD.DisplayAll();
+                break;
+            case 2:
+                SearchDisplay obj = new SearchDisplay();
+                obj.DisplayCurrentPlan();
+                break;
+            default:
+                break;
+        }
+        
+    }
+}
+
