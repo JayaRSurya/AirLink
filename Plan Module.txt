@@ -1,0 +1,37 @@
+create table Plans(
+id int primary key identity(1,1),
+planType varchar(100)not null,
+cost nvarchar(100) not null,
+validity varchar(100) not null,
+details varchar(255)not null)
+
+
+insert into Plans(planType,cost,validity,details) values
+('Unlimited','150','1 Month','1GB per day,Unlimited Talktime,150 free messages'),
+('Unlimited','250','2 Months','1.5GB per day,Unlimited Talktime,250 free messages'),
+('Unlimited','500','6 Months','2GB per day,Unlimited Talktime,500 free messages'),
+('Smart Recharge','75','1 Month','Rs.75 Talktime,75 free messages'),
+('Smart Recharge','150','2 Months','Rs.150 Talktime,150 free messages'),
+('Smart Recharge','300','3 Months','Rs.150 Talktime,300 free messages'),
+('Talktime','100','No validity','Rs.81.74 Talktime'),
+('Talktime','500','No validity','Rs.423.73 Talktime'),
+('Talktime','1000','No validity','Rs.847.46 Talktime'),
+('Data','101','1 Month','6GB data'),
+('Data','201','2 Months','20GB data'),
+('Data','301','3 Months','50GB data'),
+('International Roaming','1200','30 days','1GB Data,150 mins of incoming/outgoing calls'),
+('International Roaming','6000','90 days','1800 mins of incoming/outgoing calls,150 sms'),
+('International Roaming','9000','180 days','Unlimited incoming,300 mins of incoming/outgoing calls')
+
+
+select * from Plans
+
+create procedure SearchPlans
+(@planType varchar(100))
+as begin 
+select id,planType,cost,validity,details from Plans where planType=@planType
+end
+
+drop procedure SearchPlans
+
+SearchPlans Unlimited
